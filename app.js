@@ -1,4 +1,5 @@
 import express from 'express';
+import bookService from './book-service';
 import books from './data';
 import lists from './lists';
  
@@ -12,8 +13,8 @@ app.listen(PORT, () => {
 
 
 app.get('/api/v1/books', (request, response) => {
-    response.json(books);
-});
+    bookService.getAll().then((rows)=>response.json(rows)).catch((error)=> response.status(500).send(error));
+}); 
 
 app.get('/api/v1/lists', (request, response) => {
     response.json(lists);
@@ -98,3 +99,5 @@ app.delete('/api/v1/books/:id', (request, response) => {
         response.status(404).send(`Failed to delete book with id '${id}'. Task not found.`);
     }
 });
+
+export default app;
